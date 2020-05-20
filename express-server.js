@@ -1,3 +1,6 @@
+const express = require("express")
+const cors = reuqire("cors")
+const bodyParser = require("body-parser")
 const morgan = require("morgan")
 const _ = require("lodash")
 
