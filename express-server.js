@@ -1,7 +1,9 @@
 const http = require("http")
+const https = require("https")
 const express = require('express')
 const multer  = require('multer')
 const cors = require("cors")
+const fs = require("fs")
 
 // SET STORAGE
 const storage = multer.diskStorage({
@@ -20,12 +22,6 @@ const app = express();
 
 app.use(cors())
 
-// // Настройка сервера Express
-// const options = {
-//     cert: fs.readFileSync('./sslcert/fullchain.pem'),
-//     key: fs.readFileSync('./sslcert/privkey.pem')
-// };
-
 app.post('/uploadfile', upload.single('file'), (req, res, next) => {
     const file = req.file
     if (!file) {
@@ -33,12 +29,12 @@ app.post('/uploadfile', upload.single('file'), (req, res, next) => {
         error.httpStatusCode = 400
         return next(error)
     }
-    res.send(file)
+    res.send({filename: file.name})
 
 })
 
-const httpServer = http.createServer(app)
-// const httpsServer = https.createServer(options, app)
-
-httpServer.listen(8081)
-// httpsServer.listen(8082)
+http.createServer(app).listen(8081)
+https.createServer({
+    cert: fs.readFileSync('./sslcert/fullchain.pem'),
+    key: fs.readFileSync('./sslcert/privkey.pem')
+}, app).listen(8082)
