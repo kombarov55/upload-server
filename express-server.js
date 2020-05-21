@@ -28,7 +28,7 @@ app.post('/uploadfile', upload.single('file'), (req, res, next) => {
         error.httpStatusCode = 400
         return next(error)
     }
-    res.send({filename: file})
+    res.send({filename: file.filename})
 
 })
 
